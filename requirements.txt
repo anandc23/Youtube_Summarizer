@@ -1,0 +1,11 @@
+flask
+flask-cors
+yt-dlp
+ffmpeg-python
+openai-whisper
+transformers
+torch
+youtube-transcript-api
+pymongo
+werkzeug
+sentencepiece

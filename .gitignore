@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+env/
+venv/
+ENV/
+*.sqlite3
+*.db
+.DS_Store
+*.log
+.cache/
+*.bak
+*.swp
+.idea/
+.vscode/
+node_modules/
+# Ignore model and temp files
+*.pt
+*.bin
+*.safetensors
+*.wav
+*.mp3
+*.webm
+*.tmp
