@@ -4,6 +4,10 @@ A high-performance AI workspace to **Summarize, Transcribe, and Repurpose** YouT
 
 ---
 
+<img width="1911" height="850" alt="Screenshot 2026-03-20 155535" src="https://github.com/user-attachments/assets/cd4d5124-2765-4a0c-af8d-b2fb0d61376b" />
+
+
+
 ## 🛠️ How it Works (Step-by-Step)
 
 The project leverages a decoupled frontend (React) and backend (Python/Flask) architecture:
@@ -93,6 +97,11 @@ npm run dev
 3. Select the number of short clips (if extracting shorts) and hit **Build Summary**.
 
 ---
+
+<img width="753" height="864" alt="Screenshot 2026-03-20 155855" src="https://github.com/user-attachments/assets/2769151d-38b2-4812-b743-852f58137caf" />
+
+
+<img width="1007" height="857" alt="Screenshot 2026-03-20 160049" src="https://github.com/user-attachments/assets/e868e8c1-7339-4bc9-89c5-4312a2033b3f" />
 
 ## 🔥 Key Features
 - **Multilingual Support**: Automatically processes non-English videos into English.
