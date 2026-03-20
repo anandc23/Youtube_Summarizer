@@ -1,3 +1,6 @@
+# To install all dependencies listed in requirements.txt, run this command in your terminal:
+
+
 flask
 flask-cors
 yt-dlp
@@ -9,3 +12,4 @@ youtube-transcript-api
 pymongo
 werkzeug
 sentencepiece
+imageio[ffmpeg]

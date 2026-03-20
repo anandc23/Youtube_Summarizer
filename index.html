@@ -3,49 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Summarizer</title>
+    <title>YouTube Summarizer + Shorts Generator</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="main-bg"></div>
     <div class="container">
-        <div class="header">
-            <div class="yt-title-row">
-                <span class="yt-icon"><i class="fab fa-youtube"></i></span>
-                <span class="yt-title-text">YouTube <span class="yt-blue">Summarizer</span></span>
-            </div>
-            <p>Get AI-powered summaries of any YouTube video by Anand chaudhari</p>
-            <div class="center-btn-row">
-                <button id="check-connection" type="button">Check Connection</button>
-                <span id="connection-status"></span>
-            </div>
+        <header class="header">
+            <span class="icon video-icon">
+                <!-- SVG: Video Camera -->
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="12" rx="3" fill="#6366f1"/><path d="M21 8.5v7l-4-3.5 4-3.5z" fill="#fbbf24"/></svg>
+            </span>
+            <h1>YouTube Summarizer <span class="plus">+</span> Shorts Generator</h1>
+        </header>
+        <div class="steps">
+            <div class="step active"><span class="step-num">1</span>Paste Link</div>
+            <span class="step-arrow">→</span>
+            <div class="step"><span class="step-num">2</span>Pick Action</div>
         </div>
-
-        <div class="input-section">
-            <input type="text" id="youtube-url" placeholder="Paste YouTube video URL here">
-            <div id="video-preview" style="display:none; flex-direction:column; align-items:center;">
+        <form id="yt-form" autocomplete="off" spellcheck="false">
+            <div class="input-row">
+                <div class="input-icon">
+                    <!-- SVG: YouTube -->
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M10 15.5V8.5L16 12L10 15.5Z" fill="#fff"/></svg>
+                </div>
+                <input type="text" id="yt-url" placeholder="Paste a YouTube link to get started…" autocomplete="off" required>
+                <button id="yt-submit" type="submit">
+                    <span class="icon">
+                        <!-- SVG: Arrow Right -->
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                </button>
+            </div>
+            <div id="video-preview" style="display:none;">
                 <img id="video-thumbnail" src="" alt="Video Thumbnail">
                 <div id="video-title" class="video-title"></div>
-                <div id="video-description" class="video-description"></div>
             </div>
-
-            <div class="button-group">
-                <button id="summarize-btn" type="button">
-                    <i class="fas fa-magic"></i> Generate Summary
-                </button>
-                <button id="clear-btn" type="button">
-                    <i class="fas fa-trash"></i> Clear
-                </button>
+        </form>
+        <div class="tab-buttons">
+            <button id="tab-summary" class="tab-btn2 active" type="button">
+                <span class="icon">
+                    <!-- SVG: Summary -->
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" fill="#6366f1"/><path d="M8 9h8M8 13h5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Summarize Video
+            </button>
+            <button id="tab-shorts" class="tab-btn2" type="button">
+                <span class="icon">
+                    <!-- SVG: Shorts -->
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="4" fill="#f472b6"/><path d="M10 8l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Generate Shorts
+            </button>
+        </div>
+        <div id="summary-content" class="tab-content2 active">
+            <div id="summary-loader" class="loader">
+                <div class="spinner"></div>
+                <p>Generating summary…</p>
             </div>
+            <div id="summary-result" class="result-card"></div>
         </div>
-
-        <div class="loader">
-            <div class="spinner"></div>
-            <p>Generating summary...</p>
+        <div id="shorts-content" class="tab-content2">
+            <div id="shorts-loader" class="loader">
+                <div class="spinner"></div>
+                <p>Generating shorts…</p>
+            </div>
+            <div id="shorts-result" class="shorts-list"></div>
         </div>
-        <div id="result"></div>
     </div>
+    <footer class="footer">
+        ⚡ Built with <span style="color:#f472b6;">&#10084;</span> by Anand | 2025
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
