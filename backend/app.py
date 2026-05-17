@@ -78,7 +78,7 @@ def stream_process():
                 yield json.dumps({"status": "error", "message": "Transcript failed."}) + "\n"
                 return
 
-            if mode == "summarize":
+            if mode == "summarize" or mode == "both":
                 # Step 4: Summarize
                 yield json.dumps({"status": "summarizing", "message": "AI is architecting the summary..."}) + "\n"
                 summary_text = summarize(transcript)
@@ -94,16 +94,24 @@ def stream_process():
                     "transcript": transcript,
                     "metadata": metadata
                 }
-                yield json.dumps({"status": "complete", "data": final_data}) + "\n"
+                
+                if mode == "summarize":
+                    yield json.dumps({"status": "complete", "data": final_data}) + "\n"
             
-            elif mode == "shorts":
-                # Step 4: Shorts
+            if mode == "shorts" or mode == "both":
+                # Step 4/5: Shorts
                 yield json.dumps({"status": "shorts_processing", "message": "Creating Viral Clips (FFmpeg Engine)..."}) + "\n"
-                result = generate_shorts(url, num_shorts=num_shorts, clip_duration=30)
-                if result["status"] == "error":
-                     yield json.dumps({"status": "error", "message": "Shorts generation failed."}) + "\n"
-                else:
-                     yield json.dumps({"status": "complete", "data": result}) + "\n"
+                result = generate_shorts(url, num_shorts=num_shorts, clip_duration=30, transcript=transcript)
+                
+                if mode == "shorts":
+                    if result["status"] == "error":
+                         yield json.dumps({"status": "error", "message": "Shorts generation failed."}) + "\n"
+                    else:
+                         yield json.dumps({"status": "complete", "data": result}) + "\n"
+                
+                if mode == "both":
+                    final_data["shorts"] = result.get("shorts", []) if result["status"] != "error" else []
+                    yield json.dumps({"status": "complete", "data": final_data}) + "\n"
 
         except Exception as e:
             yield json.dumps({"status": "error", "message": str(e)}) + "\n"

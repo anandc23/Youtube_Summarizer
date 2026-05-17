@@ -132,7 +132,7 @@ def generate_vertical_short(input_path, output_path, start_time, duration):
     if res.returncode != 0:
         raise RuntimeError(f"FFmpeg failed: {res.stderr}")
 
-def generate_shorts(url, num_shorts=3, clip_duration=30):
+def generate_shorts(url, num_shorts=3, clip_duration=30, transcript=None):
     from transcript_handler import get_transcript
     
     video_id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
@@ -164,7 +164,8 @@ def generate_shorts(url, num_shorts=3, clip_duration=30):
             
         # Step 2: Get Transcript for Analysis
         print("🤖 Analyzing content for hooks...")
-        transcript = get_transcript(url)
+        if transcript is None:
+            transcript = get_transcript(url)
         best_segments = analyze_engaging_segments(transcript, num_shorts, clip_duration)
 
         # Step 3: Slash and Crop

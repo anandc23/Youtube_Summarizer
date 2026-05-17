@@ -31,7 +31,7 @@ const Toast = ({ message, onClose }) => {
 function App() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState('summarize'); 
+  const [mode, setMode] = useState('both');
   const [result, setResult] = useState(null);
   const [shorts, setShorts] = useState([]);
   const [error, setError] = useState('');
@@ -156,11 +156,13 @@ function App() {
           if (chunk.data) {
              if (chunk.status === "metadata_done") setMetadata(chunk.data);
              if (chunk.status === "complete") {
-                if (mode === 'summarize') {
+                if (mode === 'summarize' || mode === 'both') {
                   setResult(chunk.data);
                   saveToHistory(chunk.data);
                 }
-                if (mode === 'shorts') setShorts(chunk.data.shorts);
+                if (mode === 'shorts' || mode === 'both') {
+                  setShorts(chunk.data.shorts || []);
+                }
                 addStatus("Generation Complete.", 'success');
              }
           }
@@ -250,6 +252,7 @@ function App() {
 
             <div className="tab-bar">
               {[ 
+                {id: 'both', icon: Sparkles, label: 'Full Analysis'},
                 {id: 'summarize', icon: FileText, label: 'Report'},
                 {id: 'shorts', icon: Video, label: 'Viral Extractions'}
               ].map(opt => (
@@ -267,7 +270,7 @@ function App() {
               </button>
             </div>
 
-            {mode === 'shorts' && (
+            {(mode === 'shorts' || mode === 'both') && (
               <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', background: 'var(--bg-highlight)', borderRadius: '12px', border: '1px solid var(--border-soft)' }}>
                 <label style={{ fontSize: '0.8rem', fontFamily: 'var(--font-ui)', fontWeight: 600, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                   Clip Count: <span style={{ color: 'var(--primary)', fontSize: '0.9rem' }}>{numShorts}</span>
@@ -309,7 +312,7 @@ function App() {
                 const isError = log.type === 'error';
                 return (
                   <div key={i} className={`step-item ${isSuccess ? 'done' : isError ? '' : 'active'}`} style={isError ? {color: 'var(--error)'} : {}}>
-                    <div className="step-dot" style={isError ? {borderColor: 'var(--error)', background: 'var(--error)', boxShadow: '0 0 8px var(--error)', animation: 'none'} : {}} />
+                    <div className="step-dot" style={isError ? {borderColor: 'var(--error)', background: 'var(--error)'} : {}} />
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>[{log.time}]</span> {log.msg}
                   </div>
                 );
