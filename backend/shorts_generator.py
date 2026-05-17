@@ -123,7 +123,7 @@ def generate_vertical_short(input_path, output_path, start_time, duration):
         "-t", str(duration),
         "-i", input_path,
         "-vf", vf,
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
         "-c:a", "aac", "-b:a", "128k",
         "-movflags", "+faststart",
         output_path
@@ -143,13 +143,15 @@ def generate_shorts(url, num_shorts=3, clip_duration=30, transcript=None):
     try:
         # Step 1: Download
         print(f"📥 Downloading video for shorts: {url}")
-        # Note: On Windows, use 'nopart' to avoid WinError 32 during file renaming
+        # Note: On Windows, use 'nopart' and 'updatetime': False to avoid WinError 32 during file renaming
+        # Using 'best[ext=mp4]' avoids ffmpeg merging video+audio, bypassing temp files entirely and increasing speed.
         ydl_opts = {
-            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            'format': 'best[ext=mp4]/best',
             'outtmpl': os.path.join(TEMP_DIR, f"raw_{video_id}.%(ext)s"),
             'quiet': True,
             'noplaylist': True,
             'nopart': True, 
+            'updatetime': False,
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)

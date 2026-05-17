@@ -44,6 +44,8 @@ def download_audio(youtube_url, temp_dir):
         'outtmpl': audio_path_template,
         'quiet': True,
         'noplaylist': True,
+        'nopart': True,
+        'updatetime': False,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
