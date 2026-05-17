@@ -38,6 +38,7 @@ function App() {
   const [toast, setToast] = useState('');
   const [numShorts, setNumShorts] = useState(3);
   const [history, setHistory] = useState([]);
+  const [lastUrl, setLastUrl] = useState('');
   
   const [statusLog, setStatusLog] = useState([]);
   const [metadata, setMetadata] = useState(null);
@@ -59,12 +60,11 @@ function App() {
     localStorage.setItem('yt_summarizer_history', JSON.stringify(updated));
   };
 
-  const resetData = () => {
-    setResult(null);
-    setShorts([]);
+  const resetDataForMode = (currentMode) => {
+    if (currentMode === 'summarize' || currentMode === 'both') setResult(null);
+    if (currentMode === 'shorts' || currentMode === 'both') setShorts([]);
     setError('');
     setStatusLog([]);
-    setMetadata(null);
   };
 
   const handlePaste = async () => {
@@ -103,7 +103,16 @@ function App() {
   const handleProcess = async (e) => {
     e.preventDefault();
     if (!url) return;
-    resetData();
+
+    if (url !== lastUrl) {
+       setResult(null);
+       setShorts([]);
+       setMetadata(null);
+       setLastUrl(url);
+    } else {
+       resetDataForMode(mode);
+    }
+    
     setLoading(true);
 
     try {
@@ -156,12 +165,12 @@ function App() {
           if (chunk.data) {
              if (chunk.status === "metadata_done") setMetadata(chunk.data);
              if (chunk.status === "complete") {
-                if (mode === 'summarize' || mode === 'both') {
+                if (chunk.data && chunk.data.summary) {
                   setResult(chunk.data);
                   saveToHistory(chunk.data);
                 }
-                if (mode === 'shorts' || mode === 'both') {
-                  setShorts(chunk.data.shorts || []);
+                if (chunk.data && chunk.data.shorts) {
+                  setShorts(chunk.data.shorts);
                 }
                 addStatus("Generation Complete.", 'success');
              }
@@ -244,7 +253,7 @@ function App() {
                 </button>
               </div>
               <button type="submit" className="cta-btn" disabled={loading}>
-                {loading ? <><Loader2 className="spinner" size={16} /> GENERATING...</> : <><Sparkles size={16} /> Build Summary</>}
+                {loading ? <><Loader2 className="spinner" size={16} /> PROCESSING...</> : <><Sparkles size={16} /> Analyze Video</>}
               </button>
             </div>
 
@@ -260,12 +269,12 @@ function App() {
                   key={opt.id} 
                   type="button"
                   className={`tab-btn ${mode === opt.id ? 'active' : ''}`}
-                  onClick={() => { setMode(opt.id); resetData(); }}
+                  onClick={() => { setMode(opt.id); }}
                 >
                   <opt.icon size={16} /> {opt.label}
                 </button>
               ))}
-              <button type="button" className="cleanup-btn" onClick={() => { setUrl(''); resetData(); }}>
+              <button type="button" className="cleanup-btn" onClick={() => { setUrl(''); setResult(null); setShorts([]); setMetadata(null); setStatusLog([]); }}>
                 <Trash2 size={16}/> Clear
               </button>
             </div>
@@ -323,7 +332,7 @@ function App() {
 
         {/* Result Area */}
         <AnimatePresence mode="wait">
-          {result && !loading && (
+          {result && (
             <motion.div 
               className="result-container"
               initial={{ opacity: 0, y: 20 }}
@@ -376,7 +385,7 @@ function App() {
             </motion.div>
           )}
 
-          {shorts.length > 0 && !loading && (
+          {shorts.length > 0 && (
             <motion.div 
               className="result-container"
               initial={{ opacity: 0, y: 20 }}
