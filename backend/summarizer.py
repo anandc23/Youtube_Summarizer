@@ -9,8 +9,8 @@ from faster_whisper import WhisperModel
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # Constants
-EN_MODEL = "facebook/bart-large-cnn"
-WHISPER_MODEL = "small"
+EN_MODEL = "sshleifer/distilbart-cnn-12-6"
+WHISPER_MODEL = "tiny"
 
 # Resource Registry
 _whisper = None

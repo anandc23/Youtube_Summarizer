@@ -17,10 +17,9 @@ def get_transcript(url):
     if not video_id:
         raise ValueError("Invalid YouTube URL")
 
-    # Path 1: YouTube Official API/Captains
+    # Path 1: YouTube Official API
     try:
-        api = YouTubeTranscriptApi()
-        transcript_list = api.fetch(video_id)
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
         transcript = " ".join([x["text"] for x in transcript_list])
         return transcript
     except Exception as e:
